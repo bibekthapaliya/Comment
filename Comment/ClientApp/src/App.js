@@ -8,6 +8,7 @@ import { CommentBox } from './components/CommentBox';
 import {CommentList} from './components/CommentList'
 
 import './custom.css'
+import { EditCommentRow } from './components/EditCommentRow';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -20,6 +21,8 @@ export default class App extends Component {
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/commentBox' component={CommentBox} />
         <Route path='/commentlist' component={CommentList} />
+        <Route exact path='/editComment/:id' component={EditCommentRow}></Route>
+            
 
 
       </Layout>
