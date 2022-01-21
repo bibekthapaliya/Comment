@@ -1,11 +1,12 @@
 ﻿
 import * as React from 'react';
-import { Component } from 'react';
+import { Component,PureComponent } from 'react';
 import { Fragment } from 'react';
 import { Button } from 'react-bootstrap'
 import axios from 'axios';
 import { CommentBox } from './CommentBox';
-import {EditCommentRow} from './EditCommentRow'
+//import {EditCommentRow} from './EditCommentRow'
+import { Link } from 'react-router-dom';
 
 
 
@@ -21,8 +22,12 @@ interface ICommentListState {
     commentlist: any[];
     editCommentId: string;
     editFormData: object;
+  
+
 }
-export class CommentList extends Component<IcommentListProps, ICommentListState>{
+
+
+export class CommentList extends PureComponent<IcommentListProps, ICommentListState>{
 
 
 
@@ -36,47 +41,33 @@ export class CommentList extends Component<IcommentListProps, ICommentListState>
              lastName: '',
              Comment:''
          }
-        
+           
          
      };
 
      //this.populateCommentdata = this.populateCommentdata.bind(this);
      this.renderCommentTable = this.renderCommentTable.bind(this);
      this.onDeleteData = this.onDeleteData.bind(this);
-     this.onEditData = this.onEditData.bind(this);
-     this.handleCancelClick = this.handleCancelClick.bind(this);
-     this.onEditFormChange = this.onEditFormChange.bind(this);
+     //this.onEditData = this.onEditData.bind(this);
+    // this.handleCancelClick = this.handleCancelClick.bind(this);
+     //this.onEditFormChange = this.onEditFormChange.bind(this);
     
     
 
     }
+
     componentDidMount() {
         this.populateCommentdata();
     }
 
+   
 
 
 
-
-    async onEditData(commentid: string, comment:any) {
-
-        this.setState({ editCommentId: commentid });
-         const formValues = {
-            firstName: comment.firstName,
-             lastName: comment.lastName,
-             comment:comment.comment
-
-        };
-        this.setState({ editFormData: formValues });
-       
-
-    }
-
-
-
-
-
+   
+    
      async  onDeleteData(commentid:String) {
+
          let id = {
              CommentId: commentid,
                   };
@@ -88,8 +79,7 @@ export class CommentList extends Component<IcommentListProps, ICommentListState>
              headers: { "Content-type": "application/json" },
          }).then((response) => {
              this.populateCommentdata();
-             console.log(response);
-
+             
          })
              .catch((error) => {
                  console.log(error)
@@ -97,27 +87,7 @@ export class CommentList extends Component<IcommentListProps, ICommentListState>
 
     }
 
-
-
-
-
-    async handleCancelClick(){
-        this.setState({ editCommentId: '' });
-
-    };
-
-    async onEditFormChange(event: any) {
-
-        const fieldName = event.target.getAttribute("name");
-        const fieldValue = event.target.value;
-        const  newFormData:any = { ...this.state.editFormData };
-        newFormData[fieldName] = fieldValue;
-
-        this.setState({ editFormData: newFormData });
-        
-
-    }
-
+           
     async populateCommentdata() {
         const response = await fetch('/Comment');
         const data = await response.json();
@@ -143,14 +113,7 @@ export class CommentList extends Component<IcommentListProps, ICommentListState>
                 <tbody>
                     
                     {commentlist.map((comment: any, index: any) =>(
-                        <><Fragment>
-                            {this.state.editCommentId === comment.commentGuid &&
-                                <EditCommentRow editFormData={this.state.editFormData} onEditFormChange={this.onEditFormChange} handleCancelClick={this.handleCancelClick}  />
-
-                                }
-                            
-
-                        </Fragment><tr key={comment.commentGuid}>
+                        <><tr key={comment.commentGuid}>
                                 <td>{count++}</td>
                                 <td>{comment.firstName}</td>
                                 <td>{comment.lastName}</td>
@@ -161,8 +124,12 @@ export class CommentList extends Component<IcommentListProps, ICommentListState>
                                      </button>
                                 
                                     <td>&nbsp;</td>
-                                    <button className="btn-secondary" onClick={() => this.onEditData(comment.commentGuid, comment)}>Edit
-                                        </button>
+                                     <Link
+                                        className="btn btn-outline-primary mr-2"
+                                        to={`/editComment/${comment.commentGuid}`}
+                                    >
+                                        Edit
+                                    </Link>
                                     </div>
                                   </>
                             </tr></>

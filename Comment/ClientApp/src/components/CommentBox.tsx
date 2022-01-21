@@ -101,27 +101,33 @@ export class CommentBox extends Component<IcommentBoxProps,ICommentBoxState> {
         return (
             
             <>
-                <form onSubmit={this.formPost }>
-                    <div className='row'>
-                    <div className="form-group md-6">
-                        <label>FirstName</label>
-                        <input type="text" className="form-control" value={this.state.firstName} onChange={this.onChangeFirstName} placeholder="firstname" />
-                        <label>lastName</label>
-                        <input type="text" className="form-control" value={this.state.lastName} onChange={this.onChangeLastName} placeholder="lastname" />
+                <form onSubmit={this.formPost}>
 
-                        <div className="from-group">
-                        <label className="exampleFormControlTextarea1">CommentBox</label>
-                            <textarea
-                                className="form-control"
-                                value={this.state.comment}
+                    <div className='row'>
+                        <div className="form-group md-8">
+                            <div className="from-group">
+                                <label>FirstName</label>
+                                <input type="text" className="form-control" value={this.state.firstName} onChange={this.onChangeFirstName} placeholder="firstname" />
+                            </div>
+                            <div className="from-group">
+                                <label>lastName</label>
+                                <input type="text" className="form-control" value={this.state.lastName} onChange={this.onChangeLastName} placeholder="lastname" />
+                            </div>
+                            <div className="from-group">
+                                <label className="exampleFormControlTextarea1">Comment Box</label>
+                                <textarea
+                                    className="form-control"
+                                    id="exampleFormControlTextarea1"
+                                    value={this.state.comment}
                                     name="comment"
                                     placeholder="Write a comment"
-                                    rows={3}
+                                    rows={5}
                                     onChange={this.onChangeComment}
                                     required={true}
-                            />
-                        </div>
-                        <div className="from-group mb-3">
+                                />
+
+                            </div>
+
                             <input
                                 type="button"
                                 name="reset"
@@ -129,20 +135,19 @@ export class CommentBox extends Component<IcommentBoxProps,ICommentBoxState> {
                                 className="btn btn-secondary"
                                 value="Reset"
                             />
-                            
+                            <input
+                                type="submit"
+                                name="submit"
+                                className="btn btn-primary ml-2"
+                                value="Save"
+                            />
+
+
+
+
                         </div>
 
-                        <input
-                            type="submit"
-                            name="submit"
-                            className="btn btn-primary ml-2"
-                            value="Save"
-                        />
-
                     </div>
-
-             
-                </div>
 
                 </form>
 
