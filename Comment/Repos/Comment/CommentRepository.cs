@@ -14,8 +14,10 @@ namespace Comment.Repos.Comment
 
 
         Task<bool> AddComment(Comments model);
+        Task<bool> UpdateComment(Comments model);
         Task<IList<Comments>> GetCommentList();
-       Task<bool> DeleteComment(Comments model);
+        Task<Comments> GetCommentById(Guid CommentGuid);
+        Task<bool> DeleteComment(Comments model);
 
 
 
@@ -66,6 +68,27 @@ namespace Comment.Repos.Comment
             return false;
         }
 
+        public async Task<Comments> GetCommentById(Guid CommentGuid)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                var sql = @"SELECT * FROM comment where LOWER(commentGuid) LIKE @CommentGuid";
+                var comment = await conn.QueryAsync<Comments>(sql,new {CommentGuid});
+                if (comment.Count() > 0)
+                {
+                    return comment.SingleOrDefault();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+
+
+
+
         public async Task<IList<Comments>> GetCommentList()
         {
             using (IDbConnection conn = Connection)
@@ -74,6 +97,20 @@ namespace Comment.Repos.Comment
                 var commentlist = await conn.QueryAsync<Comments>(sql);
                 return commentlist.ToList();
             }
+        }
+
+        public async Task<bool> UpdateComment(Comments model)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                var sqlQuery = "UPDATE comment SET firstName=@firstName,lastName=@lastName,comment=@comment WHERE LOWER(commentGuid) like @CommentGuid";
+                var count = await conn.ExecuteAsync(sqlQuery, model);
+                   if (count > 0)
+                    return true;
+            }
+
+            return false;
+
         }
     }
 }
