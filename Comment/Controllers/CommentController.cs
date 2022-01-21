@@ -16,7 +16,7 @@ namespace Comment.Controllers
     public class CommentController : ControllerBase
     {
 
-        
+
         public readonly ICommentRepository _commentrepository;
 
         public CommentController(ICommentRepository commentRepository)
@@ -29,11 +29,21 @@ namespace Comment.Controllers
 
 
 
-        
+        [HttpGet]
         public async Task<IActionResult> GetComment()
-        {
+       {
             var comment = await _commentrepository.GetCommentList();
             return Ok(new { data = comment });
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetCommentById(Guid Id)
+      {
+           
+                var comment = await _commentrepository.GetCommentById(Id);
+                return Ok(new {data=comment});
+                     
+          
         }
 
 
@@ -59,6 +69,25 @@ namespace Comment.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateComment([FromBody] CommentModel comment)
+        {
+             if (comment != null)
+            {
+                var entity = new Comments()
+                {
+                    CommentGuid = comment.commentId,
+                    firstName = comment.firstName,
+                    lastName = comment.lastName,
+                    comment = comment.comment
+                };
+                await _commentrepository.UpdateComment(entity);
+                return Ok();
+            }
+            return BadRequest();
+        }
+
 
         [HttpDelete]
 
